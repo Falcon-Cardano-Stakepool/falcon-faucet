@@ -29,7 +29,7 @@ class App {
       ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: "*",
+      origin: "https://nft.aldea-dao.org",
       preflightContinue: false,
     };
 
