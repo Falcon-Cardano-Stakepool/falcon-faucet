@@ -27,9 +27,9 @@ class App {
         'Accept',
         'X-Access-Token'
       ],
-      credentials: true,
+      credentials: false,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: "https://nft.aldea-dao.org",
+      origin: "*",
       preflightContinue: false,
     };
 
@@ -42,6 +42,7 @@ class App {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
           "Connection": "keep-alive"
+          //"Access-Control-Allow-Origin": "http://localhost:3000"
         };
         response.writeHead(200, headers);
         
@@ -59,9 +60,14 @@ class App {
   
         console.log(`Client connected: ${id}`);
         console.log(clients);
-  
+        
+        var keepAliveConnection = setInterval(function() {
+          response.write(`data: "keeping connection alive"\n\n`)
+        }, 10 * 1000);
+
         request.on("close", () => {
           console.log(`Client disconnected: ${id}`);
+          clearInterval(keepAliveConnection);
           clients = clients.filter((client) => client.id !== id);
           console.log("Me quedan estos clientes: ", clients);
           console.log("Cantidad de clientes conectados que me quedan: ", clients.length);
