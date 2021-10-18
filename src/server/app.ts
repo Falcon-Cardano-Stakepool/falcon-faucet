@@ -18,13 +18,15 @@ class App {
 
   constructor() {
     this.express = express();
-    this.express.use(cors(options));
+    //this.express.use(cors(options));
     this.mountRoutes();
   }
 
   private mountRoutes(): void {
 
     const router = express.Router();
+
+    router.use(cors(options));
 
     router.get('/payment/:itemId', (request, response) => {
 
