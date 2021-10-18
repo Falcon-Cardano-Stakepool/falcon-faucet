@@ -8,7 +8,8 @@ export let clients = [];
 // CORS
 const options: cors.CorsOptions = {
   origin: "*",
-  credentials: true,
+  methods: "GET, PUT, POST",
+  //credentials: true,
   optionSuccessStatus: 200
 };
 
