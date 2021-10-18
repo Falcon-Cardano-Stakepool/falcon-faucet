@@ -6,10 +6,10 @@ import { processPaymentSuccess } from "./controllers/processPayment";
 export let clients = [];
 
 // CORS
-const allowedOrigins = ["https://nft.aldea-dao.org"];
-
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200
 };
 
 class App {
