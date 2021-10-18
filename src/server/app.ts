@@ -1,17 +1,8 @@
 import * as express from "express";
-import cors from "cors";
 import { processPaymentSuccess } from "./controllers/processPayment";
 
 // Clients
 export let clients = [];
-
-// CORS
-const options: cors.CorsOptions = {
-  origin: "*",
-  methods: "GET, PUT, POST",
-  //credentials: true,
-  optionSuccessStatus: 200
-};
 
 class App {
     
@@ -26,8 +17,6 @@ class App {
   private mountRoutes(): void {
 
     const router = express.Router();
-
-    router.use(cors(options));
 
     router.get('/payment/:itemId', (request, response) => {
 
