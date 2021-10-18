@@ -25,11 +25,11 @@ class App {
         'X-Requested-With',
         'Content-Type',
         'Accept',
-        'X-Access-Token',
+        'X-Access-Token'
       ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: "https://nft.aldea-dao.org/",
+      origin: "*",
       preflightContinue: false,
     };
 
@@ -41,9 +41,7 @@ class App {
         const headers = {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
-          "Connection": "keep-alive",
-          'Content-Encoding': "none",
-          "Access-Control-Allow-Origin": "*"
+          "Connection": "keep-alive"
         };
         response.writeHead(200, headers);
         
