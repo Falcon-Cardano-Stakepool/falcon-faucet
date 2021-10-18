@@ -1,8 +1,16 @@
-import * as express from 'express';
+import * as express from "express";
+import cors from "cors";
 import { processPaymentSuccess } from "./controllers/processPayment";
 
 // Clients
 export let clients = [];
+
+// CORS
+const allowedOrigins = ["https://nft.aldea-dao.org"];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
 
 class App {
     
@@ -10,6 +18,7 @@ class App {
 
   constructor() {
     this.express = express();
+    this.express.use(cors(options));
     this.mountRoutes();
   }
 
