@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as cors from "cors";
 import { processPaymentSuccess } from "./controllers/processPayment";
 
 // Clients
@@ -10,13 +11,30 @@ class App {
 
   constructor() {
     this.express = express();
-    //this.express.use(cors(options));
     this.mountRoutes();
   }
 
   private mountRoutes(): void {
 
     const router = express.Router();
+
+    //options for cors midddleware
+    const options: cors.CorsOptions = {
+      allowedHeaders: [
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Accept',
+        'X-Access-Token',
+      ],
+      credentials: true,
+      methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+      origin: "https://nft.aldea-dao.org/",
+      preflightContinue: false,
+    };
+
+    //use cors middleware
+    router.use(cors(options));
 
     router.get('/payment/:itemId', (request, response) => {
 
