@@ -96,6 +96,8 @@ class App {
 
     this.express.use('/', router);
 
+    router.options("*", cors(options));
+
   }
 }
 
