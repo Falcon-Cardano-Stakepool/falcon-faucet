@@ -31,7 +31,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
     console.log(valueReceivedEdited);
     var random = await RandomModel.findOne({ soldPrice: valueReceivedEdited }).exec();
     if(random === null) {
-      console.log("Recibí un pago para random con un valor erróneo.");
+      console.log(`Recibí un pago para Random con un valor erróneo de ${valueReceivedEdited}.`);
       // Me guardo este pago en una tabla de logs.
       return;
     }
@@ -53,7 +53,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
   } else {
     var producto = await ProductModel.findOne({ address: toAddress }).exec();
     if(producto === null) {
-      console.log("Recibí un pago para una dirección que no está en la BD.");
+      console.log(`Recibí un pago para una dirección que no está en la BD: ${toAddress}`);
       // Me guardo este pago en una tabla de logs.
       return;
     }
@@ -69,7 +69,8 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       // Acá tengo que avisar al cliente que el pago fue realizado
       foundClient = clients.find(element => element.itemId === producto.id);
       console.log(foundClient);
-      foundClient.response.write(`data: ${JSON.stringify(`${producto.id}`)}\n\n`)
+      //response.write('data: {"flight": "I768", "state": "landing"}');
+      foundClient.response.write(`data: {"id": "${JSON.stringify(`${producto.id}"}`)}\n\n`)
     } else {
       console.log("Recibí un pago con un valor menor al precio de venta.");
       // Me guardo este pago en una tabla de logs.

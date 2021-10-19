@@ -62,7 +62,8 @@ class App {
         console.log(clients);
         
         var keepAliveConnection = setInterval(function() {
-          response.write(`data: "keeping connection alive\n\n`)
+          //response.write('data: {"flight": "I768", "state": "landing"}');
+          response.write("\n\n");
         }, 10 * 1000);
 
         request.on("close", () => {
