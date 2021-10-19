@@ -70,7 +70,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       foundClient = clients.find(element => element.itemId === producto.id);
       console.log(foundClient);
       //response.write('data: {"flight": "I768", "state": "landing"}');
-      foundClient.response.write(`data: {"id": "${JSON.stringify(`${producto.id}"}`)}\n\n`)
+      foundClient.response.write(`data: ${JSON.stringify(`${producto.id}`)}\n\n`)
     } else {
       console.log("Recibí un pago con un valor menor al precio de venta.");
       // Me guardo este pago en una tabla de logs.
