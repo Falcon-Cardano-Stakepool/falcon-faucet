@@ -42,7 +42,6 @@ class App {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
           "Connection": "keep-alive"
-          //"Access-Control-Allow-Origin": "http://localhost:3000"
         };
         response.writeHead(200, headers);
         
@@ -62,7 +61,6 @@ class App {
         console.log(clients);
         
         var keepAliveConnection = setInterval(function() {
-          //response.write('data: {"flight": "I768", "state": "landing"}');
           response.write("\n\n");
         }, 10 * 1000);
 
@@ -70,8 +68,6 @@ class App {
           console.log(`Client disconnected: ${id}`);
           clearInterval(keepAliveConnection);
           clients = clients.filter((client) => client.id !== id);
-          console.log("Me quedan estos clientes: ", clients);
-          console.log("Cantidad de clientes conectados que me quedan: ", clients.length);
         })
     })
 
@@ -97,6 +93,7 @@ class App {
       
         // Return a response to acknowledge receipt of the event
         response.json({received: true});
+
     });
 
     this.express.use('/', router);

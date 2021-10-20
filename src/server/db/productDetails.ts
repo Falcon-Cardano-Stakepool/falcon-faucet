@@ -1,6 +1,4 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-import { Schema, model, models, connect } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 // 1. Create an interface representing a document in MongoDB.
 export interface Product {
@@ -40,11 +38,3 @@ const schemaProduct = new Schema<Product>({
 
 // 3. Create a Model.
 export const ProductModel = models.Product || model<Product>('Product', schemaProduct);
-
-run().catch(err => console.log(err));
-
-async function run(): Promise<void> {
-  // 4. Connect to MongoDB
-  await connect(process.env.URLDB);
-
-}

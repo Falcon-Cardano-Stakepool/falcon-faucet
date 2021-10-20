@@ -1,6 +1,4 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-import { Schema, model, models, connect } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 // 1. Create an interface representing a document in MongoDB.
 interface Random {
@@ -22,11 +20,3 @@ const schemaRandom = new Schema<Random>({
 
 // 3. Create a Model.
 export const RandomModel = models.Random || model<Random>('Random', schemaRandom);
-
-run().catch(err => console.log(err));
-
-async function run(): Promise<void> {
-  // 4. Connect to MongoDB
-  await connect(process.env.URLDB);
-
-}

@@ -1,10 +1,16 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import { Request, Response } from 'express';
 import { ProductModel } from '../db/productDetails';
 import { RandomModel } from '../db/randomDetails';
+import { PaymentModel } from '../db/paymentsLog';
+import dbConnect from "../lib/dbConnect";
 import { clients } from "../app";
 
 export const processPaymentSuccess = async (req: Request, res: Response) => {
   
+  await dbConnect();
+
   const event = req.body;
 
   const inputs = event.data.payments[0].from.length;
@@ -27,7 +33,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
 
   if(toAddress === "addr_test1qrn9r2xwpv4dmmvqlxpjklc7pexcywd7z347kurmg2e2j48pzg5047qzn9cvrvu84r0qjpvj9vs4ucytw4rqmam5ma8sxrh988") {
     // Recibí un pago para los Random
-    var valueReceivedEdited = (valueReceived / 1000000).toString();;
+    var valueReceivedEdited = (valueReceived / 1000000).toFixed(4).toString();;
     console.log(valueReceivedEdited);
     var random = await RandomModel.findOne({ soldPrice: valueReceivedEdited }).exec();
     if(random === null) {
@@ -35,7 +41,9 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       // Me guardo este pago en una tabla de logs.
       return;
     }
-    productPrice = parseInt(random.soldPrice, 10) * 1000000;
+    productPrice = parseFloat(random.soldPrice) * 1000000;
+    console.log("valueReceivedEdited: ", valueReceivedEdited);
+    console.log("valueReceived: ", valueReceived);
     console.log("ProductPrice: ", productPrice);
     if(valueReceived >= productPrice) {
       random.sold = "TRUE";
