@@ -34,17 +34,23 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
   if(toAddress === "addr_test1qrn9r2xwpv4dmmvqlxpjklc7pexcywd7z347kurmg2e2j48pzg5047qzn9cvrvu84r0qjpvj9vs4ucytw4rqmam5ma8sxrh988") {
     // Recibí un pago para los Random
     var valueReceivedEdited = (valueReceived / 1000000).toFixed(4).toString();;
-    console.log(valueReceivedEdited);
     var random = await RandomModel.findOne({ soldPrice: valueReceivedEdited }).exec();
     if(random === null) {
-      console.log(`Recibí un pago para Random con un valor erróneo de ${valueReceivedEdited}.`);
       // Me guardo este pago en una tabla de logs.
+      const pago = new PaymentModel({
+        timestamp: Date(),
+        fromAddress: fromAddress,
+        toAddress: toAddress,
+        value: valueReceived,
+        transactionHash: event.data.payments[0].transaction.hash,
+        blockHash: event.data.payments[0].transaction.block.hash,
+        message: `Recibí un pago para Random con un valor erróneo de ${valueReceivedEdited}.`,
+        trama: JSON.stringify(event.data.payments[0])
+      });
+      await pago.save();
       return;
     }
     productPrice = parseFloat(random.soldPrice) * 1000000;
-    console.log("valueReceivedEdited: ", valueReceivedEdited);
-    console.log("valueReceived: ", valueReceived);
-    console.log("ProductPrice: ", productPrice);
     if(valueReceived >= productPrice) {
       random.sold = "TRUE";
       random.transactionHash = event.data.payments[0].transaction.hash;
@@ -54,18 +60,37 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       console.log(foundClient);
       foundClient.response.write(`data: ${JSON.stringify(`${random.id}`)}\n\n`)
     } else {
-      console.log("Recibí un pago de Random con un valor menor al precio de venta.");
       // Me guardo este pago en una tabla de logs.
+      const pago = new PaymentModel({
+        timestamp: Date(),
+        fromAddress: fromAddress,
+        toAddress: toAddress,
+        value: valueReceived,
+        transactionHash: event.data.payments[0].transaction.hash,
+        blockHash: event.data.payments[0].transaction.block.hash,
+        message: `Recibí un pago para Random con un valor menor al precio de venta.`,
+        trama: JSON.stringify(event.data.payments[0])
+      });
+      await pago.save();
       return;
     }
   } else {
     var producto = await ProductModel.findOne({ address: toAddress }).exec();
     if(producto === null) {
-      console.log(`Recibí un pago para una dirección que no está en la BD: ${toAddress}`);
       // Me guardo este pago en una tabla de logs.
+      const pago = new PaymentModel({
+        timestamp: Date(),
+        fromAddress: fromAddress,
+        toAddress: toAddress,
+        value: valueReceived,
+        transactionHash: event.data.payments[0].transaction.hash,
+        blockHash: event.data.payments[0].transaction.block.hash,
+        message: `Recibí un pago para una dirección que no está en la BD: ${toAddress}`,
+        trama: JSON.stringify(event.data.payments[0])
+      });
+      await pago.save();
       return;
     }
-    console.log("Encontré el producto: ", producto);
 
     productPrice = Math.trunc(producto.price) * 1000000;
     if(valueReceived >= productPrice) {
@@ -76,12 +101,21 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       await producto.save();
       // Acá tengo que avisar al cliente que el pago fue realizado
       foundClient = clients.find(element => element.itemId === producto.id);
-      console.log(foundClient);
       //response.write('data: {"flight": "I768", "state": "landing"}');
       foundClient.response.write(`data: ${JSON.stringify(`${producto.id}`)}\n\n`)
     } else {
-      console.log("Recibí un pago con un valor menor al precio de venta.");
       // Me guardo este pago en una tabla de logs.
+      const pago = new PaymentModel({
+        timestamp: Date(),
+        fromAddress: fromAddress,
+        toAddress: toAddress,
+        value: valueReceived,
+        transactionHash: event.data.payments[0].transaction.hash,
+        blockHash: event.data.payments[0].transaction.block.hash,
+        message: "Recibí un pago NO Random con un valor menor al precio de venta.",
+        trama: JSON.stringify(event.data.payments[0])
+      });
+      await pago.save();
       return;
     }
   }
