@@ -8,7 +8,7 @@ export const housekeeping = async () => {
   check44();
   checkRandoms();
   return;
-  
+
 }
 
 const check44 = async () => {
@@ -46,5 +46,4 @@ const checkRandoms = async () => {
     await ProductModel.findOneAndUpdate( { id: "0" }, { quantity: cantidad.toString() });
   })
   
-
 }

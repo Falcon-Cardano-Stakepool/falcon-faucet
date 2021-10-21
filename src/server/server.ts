@@ -3,7 +3,7 @@ import { addRegisters } from "./controllers/addRegisters";
 
 const port = process.env.PORT || 8000;
 
-addRegisters();
+//addRegisters();
 
 App.listen(port, (err) => {
     
