@@ -53,6 +53,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       random.sold = "TRUE";
       random.transactionHash = event.data.payments[0].transaction.hash;
       random.fromAddress = fromAddress;
+      random.lastUpdate = Date();
       await random.save();
       foundClient = clients.find(element => element.itemId === random.id);
       console.log(foundClient);
@@ -96,6 +97,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
       producto.soldPrice = producto.price;
       producto.transactionHash = event.data.payments[0].transaction.hash;
       producto.fromAddress = fromAddress;
+      producto.lastUpdate = Date();
       await producto.save();
       // Acá tengo que avisar al cliente que el pago fue realizado
       foundClient = clients.find(element => element.itemId === producto.id);
