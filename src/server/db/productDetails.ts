@@ -16,6 +16,7 @@ export interface Product {
   address: string;
   fromAddress: string;
   transactionHash: string;
+  lastUpdate: Date;
 }
 
 // 2. Create a Schema corresponding to the document interface.
@@ -34,6 +35,7 @@ const schemaProduct = new Schema<Product>({
   address: { type: String, required: false},
   fromAddress: { type: String, required: false},
   transactionHash: { type: String, required: false},
+  lastUpdate: { type: Date, required: false},
 });
 
 // 3. Create a Model.

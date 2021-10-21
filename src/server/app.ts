@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
 import { processPaymentSuccess } from "./controllers/processPayment";
+import { housekeeping } from "./controllers/housekeeping";
 
 // Clients
 export let clients = [];
@@ -99,6 +100,11 @@ class App {
     this.express.use('/', router);
 
     router.options("*", cors(options));
+
+    // Housekeeping Background Process every 2 minutes
+    setInterval(function() {
+      housekeeping();
+    }, 60 * 2 * 1000);
 
   }
 }

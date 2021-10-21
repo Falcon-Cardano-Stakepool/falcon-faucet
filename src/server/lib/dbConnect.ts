@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import * as mongoose from "mongoose";
 
 const MONGODB_URI = process.env.URLDB
