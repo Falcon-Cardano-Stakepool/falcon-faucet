@@ -32,7 +32,7 @@ export const processPaymentSuccess = async (req: Request, res: Response) => {
   if(toAddress === "addr_test1qrn9r2xwpv4dmmvqlxpjklc7pexcywd7z347kurmg2e2j48pzg5047qzn9cvrvu84r0qjpvj9vs4ucytw4rqmam5ma8sxrh988") {
     // Recibí un pago para los Random
     var valueReceivedEdited = (valueReceived / 1000000).toFixed(4).toString();;
-    var random = await RandomModel.findOne({ soldPrice: valueReceivedEdited }).exec();
+    var random = await RandomModel.findOne({ soldPrice: valueReceivedEdited, sold: "PENDING" }).exec();
     if(random === null) {
       // Me guardo este pago en una tabla de logs.
       const pago = new PaymentModel({
