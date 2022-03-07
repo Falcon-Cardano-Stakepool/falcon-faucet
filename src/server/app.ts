@@ -80,7 +80,7 @@ class App {
         switch (event.type) {
           case 'payment':
               console.log("*** Payment event ***");
-              console.log(JSON.stringify(event.data.payments));
+              console.log(event);
               processPaymentSuccess(request, response);
             break;
           case 'epoch':
