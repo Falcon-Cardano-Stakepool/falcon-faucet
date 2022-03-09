@@ -8,7 +8,8 @@ export interface Payment {
   value: string;
   transactionHash: string;
   blockHash: string;
-  message: string
+  message: string;
+  trama: string;
 }
 
 // 2. Create a Schema corresponding to the document interface.
@@ -19,7 +20,8 @@ const schemaPayment = new Schema<Payment>({
   value: { type: String, required: true },
   transactionHash: { type: String, required: true },
   blockHash: { type: String, required: true },
-  message: { type: String, required: false }
+  message: { type: String, required: false },
+  trama: { type: String, required: false }
 });
 
 // 3. Create a Model.
