@@ -25,7 +25,7 @@ export const processPayment = async (req: Request, res: Response) => {
     const privateKey = deriveSpendPrivateKey(accountKey, 0).to_raw_key();
 
     //const adaTransaction = await buildAdaTx(process.env.FAUCET_ADDRESS, minter, "2000000", privateKey);
-    const assetTransaction = await buildMultiAssetTx(process.env.FAUCET_ADDRESS, minter, process.env.POLICY_ID, process.env.ASSET, process.env.ASSET_NAME, "1", privateKey);
+    const assetTransaction = await buildMultiAssetTx(process.env.FAUCET_ADDRESS, minter, process.env.POLICY_ID, process.env.ASSET_NAME, "1", privateKey);
 
     //console.log(adaTransaction);
 

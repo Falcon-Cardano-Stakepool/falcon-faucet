@@ -318,7 +318,6 @@ export async function buildMultiAssetTx(
   fromAddress: string, 
   toAddress: string, 
   policy: string, 
-  asset: string, 
   assetName: string, 
   amount: string, 
   privateKey: CardanoWasm.PrivateKey
