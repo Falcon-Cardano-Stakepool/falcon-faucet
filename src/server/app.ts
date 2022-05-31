@@ -1,7 +1,6 @@
 import * as express from "express";
 import * as cors from "cors";
-import { processPaymentSuccess } from "./controllers/processPayment";
-import { housekeeping } from "./controllers/housekeeping";
+import { processPayment } from "./controllers/processPayment";
 
 // Clients
 export let clients = [];
@@ -37,7 +36,31 @@ class App {
     //use cors middleware
     router.use(cors(options));
 
-    router.get('/payment/:itemId', (request, response) => {
+    router.post('/', express.json({type: 'application/json'}), (request, response) => {
+      
+      const event = request.body;
+    
+      // Handle the event
+      switch (event.type) {
+        case 'payment':
+            console.log("*** Payment event ***");
+            console.log(event);
+            processPayment(request, response);
+          break;
+        case 'epoch':
+            console.log("*** Epoch event ***");
+     
+          break;
+        // ... handle other event types
+        default:
+          console.log(`Unhandled event type ${event.type}`);
+      }
+    
+      // Return a response to acknowledge receipt of the event
+      response.json({received: true});
+
+  });
+/*     router.get('/payment/:itemId', (request, response) => {
 
         const headers = {
           "Content-Type": "text/event-stream",
@@ -70,41 +93,11 @@ class App {
           clearInterval(keepAliveConnection);
           clients = clients.filter((client) => client.id !== id);
         })
-    })
-
-    router.post('/', express.json({type: 'application/json'}), (request, response) => {
-      
-        const event = request.body;
-      
-        // Handle the event
-        switch (event.type) {
-          case 'payment':
-              console.log("*** Payment event ***");
-              console.log(event);
-              processPaymentSuccess(request, response);
-            break;
-          case 'epoch':
-              console.log("*** Epoch event ***");
-       
-            break;
-          // ... handle other event types
-          default:
-            console.log(`Unhandled event type ${event.type}`);
-        }
-      
-        // Return a response to acknowledge receipt of the event
-        response.json({received: true});
-
-    });
+    }) */
 
     this.express.use('/', router);
 
     router.options("*", cors(options));
-
-    // Housekeeping Background Process every 2 minutes
-    setInterval(function() {
-      housekeeping();
-    }, 60 * 2 * 1000);
 
   }
 }
