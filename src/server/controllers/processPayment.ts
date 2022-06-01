@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import { deriveRootKey, buildAdaTx, buildMultiAssetTx, deriveAccountKey, deriveSpendPrivateKey } from '../helpers/aux';
+import { deriveRootKey, deriveAccountKey, deriveSpendPrivateKey } from '../helpers/aux';
+import { buildAdaTx, buildMultiAssetTx } from '../helpers/tx';
 import { Request, Response } from 'express';
 
 export const processPayment = async (req: Request, res: Response) => {
