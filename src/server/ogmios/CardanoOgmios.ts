@@ -1,5 +1,7 @@
+import * as dotenv from 'dotenv';
 import { getServerHealth, Connection } from '../helpers/common';
 import { getTxHashFromTxHex, fromHex, arrayBufferToBase64 } from '../helpers/aux';
+dotenv.config();
 
 const WebSocket = require('ws'); //Node
 //const _WebSocket = require('isomorphic-ws'); //node and browser, but not compatible code at the end
@@ -47,7 +49,7 @@ const wsErrCodes:{[key:string]:string}={
     "1015":"TLS handshake",
 }
 
-export const startCardanoOgmiosClient=(url="wss://d.ogmios-api.testnet.dandelion.link",apiKey?:string,options?:any):Promise<WebSocket>=>{
+export const startCardanoOgmiosClient=(url=`wss://d.ogmios-api.${process.env.ENVIRONMENT}.dandelion.link`,apiKey?:string,options?:any):Promise<WebSocket>=>{
     const {
         exitOnNotSynced,
         exitOnError
