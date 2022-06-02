@@ -12,7 +12,7 @@ export const getTxUnspentOutputs = async (address: string) => {
 
 async function getUTxOs(address: string) {
 
-  const url = `https://d.graphql-api.testnet.dandelion.link`;
+  const url = `https://d.graphql-api.${process.env.ENVIRONMENT}.dandelion.link`;
 
   const headers = {
     "content-type": "application/json"

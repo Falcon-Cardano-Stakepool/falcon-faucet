@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getSlotNo() {
   
-  const url = `https://d.graphql-api.testnet.dandelion.link`;
+  const url = `https://d.graphql-api.${process.env.ENVIRONMENT}.dandelion.link`;
 
   const headers = {
     "content-type": "application/json"

@@ -1,8 +1,10 @@
+import * as dotenv from 'dotenv';
 import axios from "axios";
+dotenv.config();
 
 export async function getParameters() {
   
-  const url = `https://d.graphql-api.testnet.dandelion.link`;
+  const url = `https://d.graphql-api.${process.env.ENVIRONMENT}.dandelion.link`;
 
   const headers = {
     "content-type": "application/json"
