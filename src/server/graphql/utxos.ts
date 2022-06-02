@@ -123,7 +123,7 @@ async function getUTxOs(address: string) {
         multiAssetStr: multiAssetStr,
         TransactionUnspentOutput: utxo,
       }
-      console.log("utxo object: ", utxoObj);
+      //console.log("utxo object: ", utxoObj);
       Utxos.push(utxoObj)
     }
     return Utxos

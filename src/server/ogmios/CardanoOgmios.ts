@@ -30,6 +30,7 @@ function OgmiosErrList2Obj(errList:Array<any>):any{
 }
 
 const WS_ERR_NORMAL_CLOSURE=1000
+const WS_ERR_TIMEOUT=1006
 const wsErrCodes:{[key:string]:string}={
     "1000":"Normal Closure",
     "1001":"Going Away",
@@ -90,11 +91,12 @@ export const startCardanoOgmiosClient=(url="wss://d.ogmios-api.testnet.dandelion
         }
         const closeHandler = ( ev: CloseEvent):any =>{
             const {code,reason}=ev; //https://www.rfc-editor.org/rfc/rfc6455#section-11.7
-            if(code===WS_ERR_NORMAL_CLOSURE)
+            if(code===WS_ERR_NORMAL_CLOSURE ||
+               code===WS_ERR_TIMEOUT)
                 return;
             const codeMsg=wsErrCodes[String(code)] || ""
             //throw Error(`Ogmios error. WS connection closed. ${reason} (${code}:${codeMsg})`);
-            console.error(`Ogmios error. WS connection closed. ${reason} (${code}:${codeMsg})`);
+            console.error(`Close Handler: Ogmios error. WS connection closed. ${reason} (${code}:${codeMsg})`);
         }
         
         // initial ones:
@@ -110,7 +112,7 @@ export const startCardanoOgmiosClient=(url="wss://d.ogmios-api.testnet.dandelion
             if(code===WS_ERR_NORMAL_CLOSURE)
                 return;
             const codeMsg=wsErrCodes[String(code)] || ""
-            reject (Error(`Ogmios error. WS connection closed. ${reason} (${code}:${codeMsg})`));
+            reject (Error(`Initial Close Handler: Ogmios error. WS connection closed. ${reason} (${code}:${codeMsg})`));
         }
 
         const removeInitialListeners = ()=>{
@@ -209,122 +211,3 @@ export const submitTransaction= async (client:WebSocket,txHex:string):Promise<an
     
 }
 
-
-    // startCardanoOgmiosClient()
-    // .then((client:WebSocket)=>{
-    //     const bytes =
-    //     "g6QAgYJYIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGCglg5AQEBAQEBAQEB"+
-    //     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBGgAehICC"+
-    //     "WDkBAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC"+
-    //     "AgICAgIaAHgXXAIaAAH6pAMZHkahAIGCWCABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+
-    //     "AAAAAFhA169grjPSrzUUEcFEXHlZBSaZC/pzy7NzK1TvMi2qFC5ohAI0EPi+PBbpvVIHbyuz"+
-    //     "a/ON/gNKnwRljp9WGXq4D/Y=";
-    //     return submitTransaction(client,bytes)        
-    // })
-    // .then(result=>console.log({result}))
-    // .catch(err=>console.error(err.message));
-
-
-/*
-//OMG ogmios has beautiful error descriptions! but ugly format
-{
-    "type": "jsonwsp/response",
-    "version": "1.0",
-    "servicename": "ogmios",
-    "methodname": "SubmitTx",
-    "result": {
-        "SubmitFail": [
-            {
-                "invalidWitnesses": [
-                    "0100000000000000000000000000000000000000000000000000000000000000"
-                ]
-            },
-            {
-                "networkMismatch": {
-                    "expectedNetwork": "testnet",
-                    "invalidEntities": [
-                        {
-                            "type": "address",
-                            "entity": "addr1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqs9zjxd9"
-                        },
-                        {
-                            "type": "address",
-                            "entity": "addr1qypqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqgqlkws"
-                        }
-                    ]
-                }
-            },
-            {
-                "valueNotConserved": {
-                    "consumed": {
-                        "coins": 0,
-                        "assets": {}
-                    },
-                    "produced": {
-                        "coins": 10000000,
-                        "assets": {}
-                    }
-                }
-            },
-            {
-                "badInputs": [
-                    {
-                        "txId": "0000000000000000000000000000000000000000000000000000000000000000",
-                        "index": 0
-                    }
-                ]
-            },
-            {
-                "feeTooSmall": {
-                    "requiredFee": 168009,
-                    "actualFee": 129700
-                }
-            },
-            {
-                "outsideOfValidityInterval": {
-                    "interval": {
-                        "invalidBefore": null,
-                        "invalidHereafter": 7750
-                    },
-                    "currentSlot": 48929237
-                }
-            }
-        ]
-    },
-    "reflection": null
-}
-*/
-
-
-
-    /*
-    {
-    "startTime": "2021-12-20T22:32:42.684158665Z",
-    "lastKnownTip": {
-        "slot": 48928863,
-        "hash": "2062a77a1128c893c2cf4b80cd83ae0edcbc5c688b1912a41a5929139cca3fac",
-        "blockNo": 3271458
-    },
-    "lastTipUpdate": "2022-01-27T15:41:20.985604238Z",
-    "networkSynchronization": 0.99999,
-    "currentEra": "Alonzo",
-    "metrics": {
-        "activeConnections": 11,
-        "totalConnections": 177599,
-        "totalUnrouted": 189,
-        "sessionDurations": {
-            "mean": 97164.07526409454,
-            "min": 0,
-            "max": 0
-        },
-        "runtimeStats": {
-            "currentHeapSize": 12115,
-            "gcCpuTime": 38175355096210,
-            "cpuTime": 73859250578919,
-            "maxHeapSize": 672263
-        },
-        "totalMessages": 37882754
-    }
-}
-    
-    */

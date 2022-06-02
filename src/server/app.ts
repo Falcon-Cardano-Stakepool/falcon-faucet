@@ -49,7 +49,7 @@ class App {
           break;
         case 'epoch':
             console.log("*** Epoch event ***");
-     
+            // Cada principio de época puedo enviar los FALCON
           break;
         // ... handle other event types
         default:
