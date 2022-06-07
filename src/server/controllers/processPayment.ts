@@ -8,26 +8,28 @@ import { Request, Response } from 'express';
 export const processPayment = async (req: Request, res: Response) => {
    
   const event = req.body;
-  const outputs = event.data.to.length;
+  const inputs = event.data.from.length;
   const minter = event.data.from[0].address;
-  var toAddress = "";
-  var valueReceived = "";
+  var valueReceived = 0;
 
-  for (let index = 0; index < outputs; index++) {
-    const element = event.data.to[index];
+  for (let index = 0; index < inputs; index++) {
+    const element = event.data.from[index];
     if(element.address === process.env.FAUCET_ADDRESS) {
-      valueReceived = event.data.to[index].value;
-      toAddress = event.data.to[index].address;
+      console.log("Esto es un vuelto.");
+      return;
+    } else {
+      valueReceived += parseInt(element.value, 10);
     }
   }
-  
-  if(toAddress === process.env.FAUCET_ADDRESS) {
-    if(minter === process.env.FAUCET_ADDRESS) {
-      //console.log("Este es el vuelto");
-      return;
-    }
 
-    if(valueReceived >= process.env.NFT_VALUE) {
+  //if(toAddress === process.env.FAUCET_ADDRESS) {
+
+  if(minter === process.env.FAUCET_ADDRESS) {
+    //console.log("Este es el vuelto");
+    return;
+  }
+
+  if(valueReceived >= parseInt(process.env.NFT_VALUE)) {
     // ACA TENGO QUE AGREGAR LA LOGICA PARA DESENCRIPTAR
     // process.env.MNEMONIC va a venir encriptado
     // ACA TENGO QUE MANDAR LA TRANSACCION A LA WALLET QUE ME HIZO EL PAGO
@@ -43,7 +45,9 @@ export const processPayment = async (req: Request, res: Response) => {
     const result = await submitTransaction(ogmiosClient, assetTransaction);
     console.log(result);
     } else {
-      console.log("Envié a la dirección incorrecta.");
-    }
+      console.log(`Me enviaron menos de ${process.env.NFT_VALUE} lovelaces.`);
   }
+  //} else {
+  //  console.log(`Se cancela el envío a la dirección ${process.env.FAUCET_ADDRESS} del Faucet.`);
+  //}
 }
