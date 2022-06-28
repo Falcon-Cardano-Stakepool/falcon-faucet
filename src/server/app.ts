@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
 import { processPayment } from "./controllers/processPayment";
+import { getDelegations } from "./tangocrypto/delegations";
 
 // Clients
 export let clients = [];
@@ -36,6 +37,14 @@ class App {
     //use cors middleware
     router.use(cors(options));
 
+    router.get('/delegations/:poolId', async (request, response) => {
+      const poolId = request.params.poolId;
+      console.log(poolId);
+      const delegations = await getDelegations(poolId);
+      //console.log(delegations);
+      response.json({ delegations });
+    })
+
     router.post('/', express.json({type: 'application/json'}), (request, response) => {
       
       const event = request.body;
@@ -60,40 +69,6 @@ class App {
       response.json({received: true});
 
   });
-/*     router.get('/payment/:itemId', (request, response) => {
-
-        const headers = {
-          "Content-Type": "text/event-stream",
-          "Cache-Control": "no-cache",
-          "Connection": "keep-alive"
-        };
-        response.writeHead(200, headers);
-        
-        let itemId = request.params.itemId;
-  
-        const id = Date.now();
-        
-        const client = {
-          id,
-          itemId,
-          response,
-        };
-  
-        clients.push(client);
-  
-        console.log(`Client connected: ${id}`);
-        console.log(clients);
-        
-        var keepAliveConnection = setInterval(function() {
-          response.write("\n\n");
-        }, 10 * 1000);
-
-        request.on("close", () => {
-          console.log(`Client disconnected: ${id}`);
-          clearInterval(keepAliveConnection);
-          clients = clients.filter((client) => client.id !== id);
-        })
-    }) */
 
     this.express.use('/', router);
 
