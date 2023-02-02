@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
 import { processPayment } from "./controllers/processPayment";
-import { getDelegations } from "./tangocrypto/delegations";
+import { getDelegatedAdaList, getDelegations } from "./tangocrypto/delegations";
 
 // Clients
 export let clients = [];
@@ -39,10 +39,16 @@ class App {
 
     router.get('/delegations/:poolId', async (request, response) => {
       const poolId = request.params.poolId;
-      console.log(poolId);
       const delegations = await getDelegations(poolId);
       //console.log(delegations);
       response.json({ delegations });
+    })
+
+    router.get('/delegations/totalAda/:poolId', async (request, response) => {
+      const poolId = request.params.poolId;
+      const delegations = await getDelegations(poolId);
+      const totalAda = await getDelegatedAdaList(delegations);
+      response.json({ totalAda });
     })
 
     router.post('/', express.json({type: 'application/json'}), (request, response) => {

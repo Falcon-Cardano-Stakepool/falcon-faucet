@@ -42,3 +42,26 @@ export async function getDelegations(poolId) {
   }
 
 }
+
+interface Delegation {
+  stake_address: string;
+  available_rewards: number;
+  stake: number;
+}
+
+export function getDelegatedAda(delegation: Delegation) : number {
+  return delegation.available_rewards + delegation.stake;
+}
+export async function getDelegatedAdaList(delegationList: [Delegation]) : Promise<number> {
+  let totalAdaDelegated = 0
+  for (let index = 0; index < delegationList.length; index++) {
+    const delegation = delegationList[index]
+    totalAdaDelegated += delegation.available_rewards + delegation.stake
+  }
+
+  return totalAdaDelegated;
+}
+
+export function assignFalcon(delegation: Delegation) : number {
+  return delegation.available_rewards + delegation.stake;
+}
